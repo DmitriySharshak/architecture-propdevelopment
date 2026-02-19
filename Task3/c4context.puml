@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+title Диаграмма контекста - сервиса "Умный дом" 
+
+Person(user, "Собственник", "Владелец, использующий сервисы ЖКХ и Умного дома")
+
+System(propdev, "PropDevelopment", "Системы для управления недвижимостью и ЖКХ услугами")
+
+System(smartHomePartner, "Партнёр Умного дома", "Внешняя платформа, предоставляющая сервисы интеллектуального домофона и шлагбаума")
+
+Rel(user, propdev, "Использует мобильное приложение для доступа к услугам", "HTTPS")
+Rel(propdev, smartHomePartner, "Запрашивает статус и управляет устройствами через API", "HTTPS/mTLS")
+
+Boundary(smart_home_boundary, "Экосистема Умного дома") {
+    System(domofon, "Интеллектуальный домофон", "Распознавание лиц, удаленное открытие")
+    System(barrier, "Интеллектуальный шлагбаум", "Распознавание номеров, управление доступом")
+}
+
+Rel(smartHomePartner, domofon, "Управляющие команды", "MQTT/API")
+Rel(smartHomePartner, barrier, "Управляющие команды", "MQTT/API")
+
+@enduml
